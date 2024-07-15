@@ -600,7 +600,11 @@ require('lazy').setup({
       --    :Mason
       --
       --  You can press `g?` for help in this menu.
-      require('mason').setup()
+      require('mason').setup {
+        -- The directory in which to install packages.
+        -- install_root_dir = path.concat { vim.fn.stdpath "data", "mason" },
+        install_root_dir = 'C:/UTILS/NvimLSP', -- mlabrkic  -- because I want it
+      }
 
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
