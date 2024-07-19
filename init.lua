@@ -402,9 +402,28 @@ require('lazy').setup({
       end, { desc = '[S]earch [/] in Open Files' })
 
       -- Shortcut for searching your Neovim configuration files
+      --
+      -- I should have set Windows HOME Env var for "Shortcut for searching"
+      -- Windows, Win-s: system var => Environment variables
+      -- new Windows Env variable: HOME = %USERPROFILE%
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
+        -- builtin.find_files { cwd = '~/AppData/Local/nvim' }
+        -- builtin.find_files { cwd = vim.fn.getenv 'localappdata' .. '\\nvim' }
+        -- builtin.find_files { search_dirs = { vim.fn.stdpath 'config' } }
       end, { desc = '[S]earch [N]eovim files' })
+
+      vim.keymap.set('n', '<leader>smd', function()
+        -- builtin.find_files { cwd = vim.fn.getenv 'userprofile' .. '\\Documents\\' } -- mlabrkic
+        builtin.find_files { cwd = vim.fs.joinpath(vim.fn.getenv 'userprofile', 'Documents') } -- mlabrkic: Nvim v0.10.0
+        -- builtin.find_files { search_dirs = { '~/Documents' } } -- mlabrkic
+        -- builtin.find_files { search_dirs = { '~/AppData/Local/nvim', '~/Documents' } } -- mlabrkic
+        -- builtin.find_files { search_dirs = { vim.loop.os_homedir() } } -- mlabrkic
+      end, { desc = '[S]earch [My]Documents' })
+
+      vim.keymap.set('n', '<leader>smn', function()
+        builtin.find_files { cwd = vim.fs.joinpath(vim.fn.getenv 'userprofile', 'Documents', 'Notes') } -- mlabrkic: Nvim v0.10.0
+      end, { desc = '[S]earch [My]Notes' })
     end,
   },
 
