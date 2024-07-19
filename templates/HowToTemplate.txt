@@ -1,0 +1,27 @@
+How to template?
+
+Note:
+:h :e[dit]
+
+:e example1.py
+press enter
+
+-->
+#!/usr/bin/env python3
+
+------------------------------------------------------------
+autocmd.lua
+----------------------------
+" Autocommand 03:
+" Templates
+
+augroup nvim_templates
+  au!
+  " read in templates files
+  autocmd bufnewfile *.* silent! execute '0r ' . stdpath("config")  . "\\templates\\" . expand("%:e") . ".tpl"
+augroup end
+
+------------------------------------------------------------
+?
+glepnir\nvim\template\nvim_temp.lua
+
