@@ -830,7 +830,10 @@ require('lazy').setup({
         style = 'light',
         -- toggle theme style ---
         toggle_style_key = '<leader>ts', -- keybind to toggle theme style, mlabrkic
-        toggle_style_list = { 'light', 'dark' }, -- List of styles to toggle between
+        toggle_style_list = { 'dark', 'light' }, -- List of styles to toggle between
+        colors = { -- Override default colors
+          light = { 'bg0', '#f8faea' },
+        },
       }
 
       -- HACK:
