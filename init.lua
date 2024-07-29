@@ -816,10 +816,36 @@ require('lazy').setup({
   -- },
 
   {
-    -- Theme inspired by Atom
+    -- Toggle the theme style without exiting Neovim using toggle_style_key (Refer Config)
+    --
+    -- Onedark can be configured also with Vimscript, using the global dictionary g:onedark_config
+    -- :echo g:onedark_config
+    -- :echo g:onedark_config['style']
+    -- :QRedir echo g:onedark_config
     'navarasu/onedark.nvim',
     priority = 1000,
     config = function()
+      -- Options: dark, darker, cool, deep, warm, warmer, light
+      require('onedark').setup {
+        style = 'light',
+        -- toggle theme style ---
+        toggle_style_key = '<leader>ts', -- keybind to toggle theme style, mlabrkic
+        toggle_style_list = { 'light', 'dark' }, -- List of styles to toggle between
+      }
+
+      -- HACK:
+      -- %USERPROFILE%\AppData\Local\nvim-data\lazy\onedark.nvim\lua\onedark\palette.lua
+      -- light:
+      -- bg0 = "#f8faea", -- mlabrkic
+
+      -- :echo g:onedark_config['style']
+      -- :echo g:onedark_config['colors']
+      -- :lua print(vim.g.onedark_config['style'])
+      -- :lua =vim.g.onedark_config['style']
+
+      -- Enable theme:
+      -- Load color scheme {name}.  This searches 'runtimepath'
+      -- require('onedark').load()
       vim.cmd.colorscheme 'onedark'
     end,
   },
