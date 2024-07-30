@@ -85,6 +85,7 @@ keymap({ 'n', 'x' }, 'L', 'g_')
 ------------------------------
 -- https://github.com/alpha2phi/modern-neovim/tree/01-init.lua
 -- Better viewing
+
 keymap('n', 'n', 'nzzzv')
 keymap('n', 'N', 'Nzzzv')
 keymap('n', 'g,', 'g,zvzz')
@@ -95,15 +96,14 @@ keymap('n', 'g;', 'g;zvzz')
 -- https://github.com/NvChad/NvChad
 --[[
 https://vim.fandom.com/wiki/Highlight_all_search_pattern_matches
+
+-- Set highlight on search, but clear on pressing <Esc> in normal mode
+-- vim.opt.hlsearch = true -- mlabrkic
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+
 h <C-L>
 h CTRL-L
 ]]
--- keymap('n', '<Leader>l', '<Cmd>noh<CR>', '  Cancel search highlighting')
--- keymap('n', '<F2>', '<cmd>noh<CR>', '  Cancel search highlighting')
--- map({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Clear hlsearch and ESC" })
-keymapRemap('n', '<esc>', '<cmd>noh<CR>', '  Cancel search highlighting')
-
--- keymap('n', '<C-s>', '<cmd>update<cr>', '﬚  Save file if modified')
 
 -- h rnu
 -- keymap('n', '<F4>', '<cmd>set relativenumber!<cr>', 'Change: number <> relativnumber')
@@ -188,8 +188,19 @@ keymapExpr('n', 'gp', "'`[' . strpart(getregtype(), 0, 1) . '`]'", 'Select last 
 -- see https://vim.fandom.com/wiki/Set_working_directory_to_the_current_file
 -- :echo(expand("%:p:h"))
 keymap('n', '<leader>cd', '<cmd>cd %:p:h<cr><cmd>pwd<cr>', 'Switch to the directory of the open buffer, and print cwd after that.')
-keymap('t', '<Esc>', [[<c-\><c-n>]], 'Use Esc to quit builtin terminal')
 
+------------------------------
+-- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
+-- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
+-- is not what someone will guess without a bit more experience.
+--
+-- This won't work in all terminal emulators/tmux/etc. Try your own mapping
+-- or just use <C-\><C-n> to exit terminal mode
+-- vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+
+-- keymap('t', '<Esc>', [[<c-\><c-n>]], 'Use Esc to quit builtin terminal')
+
+------------------------------
 -- see also https://stackoverflow.com/q/10723700/6064933.
 keymap('x', 'p', '"_c<Esc>p', 'Replace visual selection with text in register, but not contaminate the register.')
 
@@ -200,8 +211,14 @@ keymapRemap('n', 'ć', '/', 'Enter command mode /')
 
 ------------------------------
 -- h CTRL-A
-keymap('n', '+', '<C-A>', 'Add [count] to the number or alphabetic character')
-keymap('n', '-', '<C-X>', 'Subtract [count] from the number or alphabetic character')
+-- keymap({ 'n, x' }, '+', '<C-A>', 'Add [count] to the number or alphabetic character')
+
+-- keymap({ 'n', 'x' }, 'H', '^')
+keymap({ 'n', 'x' }, '+', '<C-A>', 'Add [count] to the number or alphabetic character')
+keymap({ 'n', 'x' }, '-', '<C-X>', 'Subtract [count] from the number or alphabetic character')
+
+-- keymap('n', '+', '<C-A>', 'Add [count] to the number or alphabetic character')
+-- keymap('n', '-', '<C-X>', 'Subtract [count] from the number or alphabetic character')
 keymapRemap('n', '<C-A>', '<Nop>', 'Remap')
 keymapRemap('n', '<C-X>', '<Nop>', 'Remap')
 
@@ -223,15 +240,6 @@ keymap('i', '<C-E>', '<END>')
 -- Go to beginning of command in command-line mode
 keymap('c', '<C-A>', '<HOME>')
 
-------------------------------
--- https://github.com/jdhao/nvim-config
-
--- Toggle cursor column (--> commands.lua)
--- keymap.set("n", "<leader>cl", "<cmd>call utils#ToggleCursorCol()<cr>", { desc = "toggle cursor column" })
-
--- Edit nvim config file quickly
--- keymap('n', '<leader>ev', '<cmd>tabnew $MYVIMRC <bar> tcd %:h<cr>', 'open init.lua')
-
 ------------------------------------------------------------
 -- Always use very magic mode for searching
 keymap('n', '/', [[/\v]])
@@ -250,16 +258,16 @@ keymap('x', '/', [[y:execute "/".escape(@","\\/.*'$^~[]")<CR>]])
 -- https://thevaluable.dev/vim-search-find-replace/
 
 -- https://jdhao.github.io/2019/04/29/nvim_map_with_a_count/
--- INFO:   '<lt>Left><lt>Left>'
+-- NOTE:   '<lt>Left><lt>Left>'
 
 -- vnoremap <expr> <C-H> 'y:%s/' . escape(@",'[]/') . '//g<Left><Left>'
 -- keymapExpr('x', '<leader>h', [['y:%s/' . escape(@", "\\/.*'$^~[]") . '//g<lt>Left><lt>Left>']]) -- date: 2023-01M-25 09:25:31
 -- keymapExpr('x', '<C-H>', [['y:%s/' . escape(@", "\\/.*'$^~[]") . '//g<lt>Left><lt>Left>']]) -- date: 2023-01M-25 09:25:31
-keymapExpr('x', '<C-H>', [['y<cmd>%s/' . escape(@", "\\/.*'$^~[]") . '//g<lt>Left><lt>Left>']]) -- date: 2023-01M-25 09:25:31
+-- keymapExpr('x', '<C-H>', [['y<cmd>%s/' . escape(@", "\\/.*'$^~[]") . '//g<lt>Left><lt>Left>']]) -- date: 2023-01M-25 09:25:31
 
 -- nnoremap <expr> <C-H> ':%s/\<' . expand('<cword>') . '\>//g<Left><Left>'
 -- keymapExpr('n', '<leader>h', [[':%s/\<' . expand('<cword>') . '\>//g<lt>Left><lt>Left>']])
-keymapExpr('n', '<C-H>', [[':%s/\<' . expand('<cword>') . '\>//g<lt>Left><lt>Left>']])
+-- keymapExpr('n', '<C-H>', [[':%s/\<' . expand('<cword>') . '\>//g<lt>Left><lt>Left>']])
 
 -- https://github.com/mfussenegger/dotfiles/blob/master/vim/.config/nvim/lua/me/init.lua
 -- h gn
@@ -330,13 +338,11 @@ keymap('n', ']Q', '<cmd>clast<cr>zv', 'last qf item')
 -- C-e, Scroll down, but curson will not move
 
 -- https://github.com/tjdevries/config_manager
--- keymap("n", "<Up>", "2<C-e>", " scroll up")
 -- keymap("n", "<Up>", "<C-e>", " scroll up")
-keymap('n', '<C-Up>', '<C-e>', ' scroll up')
+keymap('n', '<Up>', '10<C-e>', ' scroll up')
 
--- keymap("n", "<Down>", "2<C-y>", " scroll down")
 -- keymap("n", "<Down>", "<C-y>", " scroll down")
-keymap('n', '<C-Down>', '<C-y>', ' scroll down')
+keymap('n', '<Down>', '10<C-y>', ' scroll down')
 
 ------------------------------------------------------------
 -- https://github.com/mfussenegger/dotfiles
@@ -344,32 +350,32 @@ keymap('n', '<C-Down>', '<C-y>', ' scroll down')
 Splitting windows
 h usr_08.txt
 h CTRL-W
+
+--------------------
+h windows.txt
+h window-move-cursor
+
+CTRL-W <Down>
+CTRL-W CTRL-J
+CTRL-W j
+Move cursor to Nth window below current one.
+Uses the cursor to select between alternatives.
+
 ]]
 
--- Better window navigation
--- https://github.com/jdhao/nvim-config
--- keymap("n", "<C-h>", "<C-w>h", " window left")
--- keymap("n", "<C-l>", "<C-w>l", " window right")
--- keymap("n", "<C-j>", "<C-w>j", " window down")
--- keymap("n", "<C-k>", "<C-w>k", " window up")
-
--- Switch windows
-keymap('n', '<left>', '<C-w>h', ' window left')
-keymap('n', '<Right>', '<C-w>l', ' window right')
-keymap('n', '<Down>', '<C-w>j', ' window down')
-keymap('n', '<Up>', '<C-w>k', ' window up')
+-- See `:help wincmd` for a list of all window commands
+-- :help wincmd
+keymap('n', '<C-Left>', '<C-w><C-h>', 'Move focus to the left window')
+keymap('n', '<C-Right>', '<C-w><C-l>', 'Move focus to the right window')
+keymap('n', '<C-Down>', '<C-w><C-j>', 'Move focus to the lower window')
+keymap('n', '<C-Up>', '<C-w><C-k>', 'Move focus to the upper window')
 
 -- Builtin terminal
 -- tnoremap <ESC>   <C-\><C-n>
--- keymap("t", "<C-h>", "<C-\\><C-n><C-w>h")
--- keymap("t", "<C-l>", "<C-\\><C-n><C-w>l")
--- keymap("t", "<C-j>", "<C-\\><C-n><C-w>j")
--- keymap("t", "<C-k>", "<C-\\><C-n><C-w>k")
-
-keymap('t', '<left>', '<C-\\><C-n><C-w>h')
-keymap('t', '<Right>', '<C-\\><C-n><C-w>l')
-keymap('t', '<Down>', '<C-\\><C-n><C-w>j')
-keymap('t', '<Up>', '<C-\\><C-n><C-w>k')
+keymap('t', '<C-Left>', '<C-\\><C-n><C-w>h')
+keymap('t', '<C-Right>', '<C-\\><C-n><C-w>l')
+keymap('t', '<C-Down>', '<C-\\><C-n><C-w>j')
+keymap('t', '<C-Up>', '<C-\\><C-n><C-w>k')
 
 ------------------------------------------------------------
 -- https://github.com/folke/dot
@@ -393,11 +399,8 @@ vim.keymap.set('i', '<A-k>', '<Esc>:m .-2<CR>==gi')
 
 ------------------------------
 -- Switch buffers with arrow
--- keymap("n", "<Left>", "<cmd>bprevious<CR>")
--- keymap("n", "<Right>", "<cmd>bnext<CR>")
-
-keymap('n', '<C-Left>', '<cmd>bprevious<CR>')
-keymap('n', '<C-Right>', '<cmd>bnext<CR>')
+keymap('n', '<Left>', '<cmd>bprevious<CR>')
+keymap('n', '<Right>', '<cmd>bnext<CR>')
 
 ------------------------------
 keymap('n', '<BS>', '<C-^>', 'Edit alternate buffer')
