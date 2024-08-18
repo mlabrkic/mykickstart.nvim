@@ -1,20 +1,14 @@
--- https://github.com/dtr2300/nvim/blob/main/lua/config/gui/nvimqt.lua
--- GUI settings - ginit.vim
+-- https://neovide.dev/configuration.html
 
-------------------------------------------------------------
--- https://github.com/akiyosi/goneovim/wiki/Tips
--- goneovim ne prepoznaje ginit.vim !?
--- ==>
--- C:\Users\...\nvim\after\plugin\autocmds.lua
--- require("custom.gui.goneovim").setup()
+-- https://github.com/dtr2300/nvim/blob/main/lua/config/gui/
 
 ------------------------------------------------------------
 --[[
 
-echo exists('g:goneovim')
+echo exists('g:neovide')
 ==> 1
 or
-lua print(vim.g.goneovim)
+lua print(vim.g.neovide)
 ==> true
 
 ------------------------------
@@ -47,14 +41,14 @@ local keymap = function(mode, key, result, desc)
 end
 
 -- :set guifont=*
--- ==> SauceCodePro NF
--- :set guifont=SauceCodePro_NF:h20
+-- ==> SauceCodePro Nerd Font
+-- :set guifont=SauceCodePro_Nerd_Font:h20
 --
 -- Font can contain spaces by either escaping them or using _ (underscores)
--- local fontname = 'SauceCodePro\\ NF'
-local fontname = 'SauceCodePro_NF'
+-- local fontname = 'SauceCodePro Nerd Font'
+local fontname = 'SauceCodePro_Nerd_Font'
 
-local fontsize_default = 16
+local fontsize_default = 17
 local fontsize = fontsize_default
 
 ---@param size? number
@@ -71,6 +65,7 @@ local function adjust_fontsize(amount)
 end
 
 function M.setup()
+  vim.g.neovide_cursor_animation_length = 0
   set_fontsize()
 
   keymap('n', '<C-+>', function()
@@ -82,8 +77,10 @@ function M.setup()
   keymap('n', '<C-0>', function()
     set_fontsize()
   end, 'Reset fontsize')
-end
 
-vim.cmd [[ normal! zz ]]
+  keymap('n', '<C-F11>', function()
+    vim.g.neovide_fullscreen = not vim.g.neovide_fullscreen
+  end, 'Toggle fullscreen')
+end
 
 return M

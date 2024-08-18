@@ -50,12 +50,14 @@ local M = {}
 
 -- Default options {opts}: {remap = false, silent = false, expr = false}
 
-local keymap = function( mode, key, result, desc )
-  vim.keymap.set( mode, key, result, { desc = desc, silent = true, } )
+local keymap = function(mode, key, result, desc)
+  vim.keymap.set(mode, key, result, { desc = desc, silent = true })
 end
 
 -- local fontname = "FiraCode NF"
-local fontname = "SauceCodePro NF"
+-- local fontname = "SauceCodePro NF"
+-- Font can contain spaces by either escaping them or using _ (underscores)
+local fontname = 'SauceCodePro_NF'
 local fontsize_default = 16
 local fontsize = fontsize_default
 local isfullscreen = false
@@ -63,7 +65,7 @@ local isfullscreen = false
 ---@param size? number
 local function set_fontsize(size)
   fontsize = size or fontsize_default
-  vim.cmd.GuiFont { fontname .. ":h" .. fontsize, bang = true }
+  vim.cmd.GuiFont { fontname .. ':h' .. fontsize, bang = true }
 end
 
 ---@param amount number
@@ -79,15 +81,21 @@ end
 function M.setup()
   vim.cmd.GuiTabline = 0
   vim.cmd.GuiPopupmenu = 0
-  vim.cmd.GuiLinespace = 2  -- jdhao
+  vim.cmd.GuiLinespace = 2 -- jdhao
 
   set_fontsize()
 
-  keymap( "n", "<leader>+", function() adjust_fontsize(1) end, "Adjust fontsize +1" )
-  keymap( "n", "<leader>-", function() adjust_fontsize(-1) end, "Adjust fontsize -1" )
-  keymap( "n", "<leader>0", function() set_fontsize() end, "Reset fontsize" )
+  keymap('n', '<leader>+', function()
+    adjust_fontsize(1)
+  end, 'Adjust fontsize +1')
+  keymap('n', '<leader>-', function()
+    adjust_fontsize(-1)
+  end, 'Adjust fontsize -1')
+  keymap('n', '<leader>0', function()
+    set_fontsize()
+  end, 'Reset fontsize')
 
-  keymap( "n", "<C-F11>", fullscreen_toggle, "Toggle fullscreen" )
+  keymap('n', '<C-F11>', fullscreen_toggle, 'Toggle fullscreen')
 end
 
 return M
