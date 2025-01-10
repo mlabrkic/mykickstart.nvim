@@ -327,8 +327,64 @@ vim.bo.shiftwidth = 4
 ----------
 
 ------------------------------------------------------------
+NOTE: 6 (h vim.o)
+
+h nvim-defaults
+
+h vim.o
 -- local o = vim.o -- for conciseness
 
+------------------------------
+https://github.com/neovim/neovim/issues/20107
+vim.o (bo/wo/go) works with tables (meta accessors), deprecate vim.opt #20107
+opened on Sep 7, 2022 · edited by clason
+
+------------------------------
+WARN: 1
+1. For flaglists:
+(Some options are a list of flags.)
+
+h cpoptions
+string
+(default "aABceFs_")
+
+-- vim.opt.cpoptions:remove({ "a" })
+vim.cmd([[set cpoptions-=a]]) -- template support
+
+------------------------------
+WARN: 2
+2. For commalists:
+
+h iskeyword
+string
+(default "@,48-57,_,192-255")
+
+-- vim.opt.iskeyword:append("-")
+-- vim.o.iskeyword = vim.o.iskeyword .. ",-"
+vim.cmd([[set iskeyword+=-]])
+
+------------------------------
+WARN: 3
+3. For dictionary options:
+
+h listchars
+string
+(default "tab:> ,trail:-,nbsp:+")
+
+-- vim.opt.listchars = { tab = "▸\\ ", extends = "❯", precedes = "❮", trail = "⣿", nbsp = "±" }
+-- vim.o.listchars = "tab:>~,trail:⣿,eol:<"
+vim.o.listchars = "tab:>~,trail:⣿"
+
+------------------------------
+WARN: 4
+4. boolean, number, string
+
+displaying text:
+
+vim.o.wrap = true
+vim.o.showbreak = "↪" -- Character to show before the lines that have been soft-wrapped
+
+------------------------------
 --[[
 
 ]]
